@@ -101,6 +101,7 @@ class GDTReceiver:
         if self.socket and self.running:
             connection , clinet_address = self.socket.accept()
             data = connection.recv(16000)
+            print(data)
             
 
     def close(self):
