@@ -8,27 +8,33 @@ class GDTMessage:
         """
         self.type = None
         self.fields = []
+        self.fileSizeTotal = 0;
 
-    def getBDTFormat(self, field_label, content , isLast=False):
+    def getBDTFormat(self, field_label, content, isLast=False):
         """
         Create a BDT line with the specified field label and content.
 
         Parameters:
         field_label (str): The field label to be included in the line.
         content (str): The content associated with the field label.
-        isLast (Boolean) : check if it last line
+        isLast (Boolean): Check if it is the last line.
 
         Returns:
         str: A formatted BDT line including the length, field label, content, 
-             and the CR LF characters at the end.
+            and the CR LF characters at the end.
         """
-        line_content = f"{field_label}{content}"
-        line_length = len(line_content) + 2  # Include CR LF
+        # Format the line content (without the length prefix)
+        line_content = f"{field_label}{content}\r\n"
+        
+        # Calculate the line length (field label + content + CRLF)
+        line_length = len(field_label) + len(content) + 5  # +2 for CR LF + 3 for nums
 
-        if(isLast == False):
-            return f"{line_length:03d}{line_content}\r\n"
-        else:
-            return f"{line_length:03d}{line_content}\r"
+        # Format with 3-digit line length (including CR LF)
+        formatted_line = f"{line_length:03d}{line_content}"
+
+        self.fileSizeTotal += line_length
+        # Return the formatted line
+        return formatted_line
 
     def appendLine(self, field_tag, content , isLast=False):
         """
@@ -52,6 +58,11 @@ class GDTMessage:
         #message = f"{self.type.value} "
         message = ''
         message += ''.join(self.fields)
+
+        # Calcuate file size 
+        self.fileSizeTotal += 5
+        message = message.replace('0098100',f'0148100{self.fileSizeTotal:005d}')
+
         return message
     
     def parseMessage(self , msg):
@@ -74,7 +85,7 @@ class GDTMessage:
         for row in msg.split('\n'):
             rowMessage = {}
             rowMessage['tag'] = row[3:7]
-            rowMessage['value'] = row[7:(len(row) - 1)]
+            rowMessage['value'] = row[7:(len(row))]
             message.append(rowMessage)
         return message
     

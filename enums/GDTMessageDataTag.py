@@ -3,6 +3,7 @@ from enum import Enum
 class GDTMessageDataTag(Enum):
     # Root Data Request
     ROOT_DATA_REQUEST_SET_TYPE = '8000'
+    DEVICE_METHOD = '8402'
     SENTENCE_LENGTH = '8100'
     RECEIVER_GDT_ID = '8315'
     SENDER_GDT_ID = '8316'

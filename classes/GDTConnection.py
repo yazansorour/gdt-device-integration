@@ -82,7 +82,7 @@ class GDTReceiver:
         """
         self.host = host
         self.port = port
-        self.socket = None
+        self.socket = None 
         self.running = False
 
     def startListener(self):
