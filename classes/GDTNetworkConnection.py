@@ -1,15 +1,15 @@
 import os
-import shutill
+import shutil
 
 
 class GDTNetworkConnection:
 
-	def __init__(self):
+	def __init__(self , inSourceDirectoryPath , inDestinationDirectoryPath):
 		self.remoteIPAddress = ''
 
 		# In folder path
-		self.inSourceDirectoryPath = ''
-		self.inDestinationDirectoryPath = ''
+		self.inSourceDirectoryPath = inSourceDirectoryPath
+		self.inDestinationDirectoryPath = inDestinationDirectoryPath
 
 		# Export Folders path
 		self.exportSourceDirectoryPath = ''
@@ -32,8 +32,21 @@ class GDTNetworkConnection:
 
 	
 	# TODO: when the report and the images copied successfully clean the folders  
-	def cleanRemoteFolderFiles():
-		return 0
+	def cleanRemoteFolderFiles(self, directoryPath):
+	    try:
+	        for filename in os.listdir(directoryPath):
+	            file_path = os.path.join(directoryPath, filename)
+	            if os.path.isfile(file_path):
+	                os.remove(file_path)
+	                print(f"Removed file: {file_path}")
+	            """
+	            elif os.path.isdir(file_path):
+	                shutil.rmtree(file_path)
+	                print(f"Removed directory: {file_path}")
+	            """
+	    except Exception as e:
+	        print(f"Error while cleaning directory: {e}")
+
 
 	def getRemoteFiles():
 		destinationFiles = set(os.listdir(remoteFolderPath))
