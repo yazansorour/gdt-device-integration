@@ -53,4 +53,6 @@ class TestGDTMessage(unittest.TestCase):
             resultMessage = file.read()
 
 
-        self.assertEqual(resultMessage, expectedResult)
+        self.assertEqual(resultMessage, expectedResult
+
+            

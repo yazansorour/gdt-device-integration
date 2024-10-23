@@ -4,16 +4,16 @@ import shutil
 
 class GDTNetworkConnection:
 
-	def __init__(self , inSourceDirectoryPath , inDestinationDirectoryPath):
+	def __init__(self , inSourceDirectoryPath , inDestinationDirectoryPath, exportSourceDirectoryPath , exportDestinationDirectoryPath):
 		self.remoteIPAddress = ''
 
-		# In folder path
+		# In folder path for requsting test result
 		self.inSourceDirectoryPath = inSourceDirectoryPath
 		self.inDestinationDirectoryPath = inDestinationDirectoryPath
 
-		# Export Folders path
-		self.exportSourceDirectoryPath = ''
-		self.exportDestinationDirectoryPath = ''
+		# Export Folders path for receving test result
+		self.exportSourceDirectoryPath = exportSourceDirectoryPath
+		self.exportDestinationDirectoryPath = exportDestinationDirectoryPath
 
 	def sendFile(self,fileName):
 
