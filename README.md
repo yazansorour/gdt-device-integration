@@ -1,0 +1,1 @@
+ This project is designed to manage GDT (Gerätedaten-Träger) messages and facilitate communication between medical devices and data management systems. It provides a structured approach to creating, parsing, and sending GDT messages, ensuring compatibility and reliability in data transfer 
