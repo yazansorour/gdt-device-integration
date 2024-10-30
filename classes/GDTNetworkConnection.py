@@ -4,21 +4,11 @@ import shutil
 
 class GDTNetworkConnection:
 
-	def __init__(self , inSourceDirectoryPath , inDestinationDirectoryPath, exportSourceDirectoryPath , exportDestinationDirectoryPath):
-		self.remoteIPAddress = ''
+	@staticmethod
+	def sendFile(filePath , destinationDir):
 
-		# In folder path for requsting test result
-		self.inSourceDirectoryPath = inSourceDirectoryPath
-		self.inDestinationDirectoryPath = inDestinationDirectoryPath
-
-		# Export Folders path for receving test result
-		self.exportSourceDirectoryPath = exportSourceDirectoryPath
-		self.exportDestinationDirectoryPath = exportDestinationDirectoryPath
-
-	def sendFile(self,fileName):
-
-		sourceFile = self.inSourceDirectoryPath + f"/{fileName}"
-		destinationFileName = os.path.join(self.inDestinationDirectoryPath , os.path.basename(sourceFile))
+		sourceFile =  filePath
+		destinationFileName = os.path.join(destinationDir , os.path.basename(sourceFile))
 
 		# Check if the file already exists in the network folder
 		if not os.path.exists(destinationFileName):
@@ -32,7 +22,8 @@ class GDTNetworkConnection:
 
 	
 	# TODO: when the report and the images copied successfully clean the folders  
-	def cleanRemoteFolderFiles(self, directoryPath):
+	@staticmethod
+	def cleanRemoteFolderFiles(directoryPath):
 	    try:
 	        for filename in os.listdir(directoryPath):
 	            file_path = os.path.join(directoryPath, filename)
@@ -47,25 +38,34 @@ class GDTNetworkConnection:
 	    except Exception as e:
 	        print(f"Error while cleaning directory: {e}")
 
+	@staticmethod
+	def getRemoteFiles(sourceDir , remoteDir):
+		isCopiedSuccessfly = False
+		copiedFiles = []
+		destinationFiles = set(os.listdir(remoteDir))
+		if len(destinationFiles):
+			for file in destinationFiles:
+				sourceFile = os.path.join(sourceDir, file)
+				destinationFile = os.path.join(remoteDir , file)
+				if not os.path.exists(sourceFile):
+					try:
+						if os.path.isfile(destinationFile):
+							shutil.copy(destinationFile , sourceFile)
+							copiedFiles.append(sourceFile)
+							print(f"Copied Successfully : {destinationFile}")
+							isCopiedSuccessfly = True
+						else:
+							print(f"is not a file : {destinationFile}")
 
-	def getRemoteFiles():
-		destinationFiles = set(os.listdir(remoteFolderPath))
-		for file in remoteFiles:
-			sourceFile = os.path.join(self.exportSourceDirectoryPath, file)
-			destinationFile = os.path.join(self.exportDestinationDirectoryPath , file)
-
-			if not os.path.exists(sourceFile):
-				try:
-					if os.path.isfile(destinationFile):
-						shutil.copy(destinationFile , sourceFile)
-						print(f"Copied Successfully : {destinationFile}")
-					else:
-						print(f"is not a file : {destinationFile}")
-
-				except Exception as e:
-					print(f"Error copying file {destinationFile} : {e}")
-			else:
-				print(f"The file already exists in the folder: {destinationFile}")
+					except Exception as e:
+						print(f"Error copying file {destinationFile} : {e}")
+						isCopiedSuccessfly = False
+				else:
+					print(f"The file already exists in the folder: {destinationFile}")
+			if (isCopiedSuccessfly == True):
+				GDTNetworkConnection.cleanRemoteFolderFiles(remoteDir)
+		return copiedFiles
+	
 
 
 
