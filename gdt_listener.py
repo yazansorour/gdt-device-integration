@@ -25,7 +25,7 @@ while True:
                 with open(fileGDTPath  , 'r') as file:
                     testResult = file.read()
 
-                response = requests.post('http://127.0.0.1:8000/api/method/endo.api.uploadTestResult', json={'testResult':testResult ,'files':newFiles},timeout=10)
+                response = requests.post('http://127.0.0.1/api/method/endo.api.uploadTestResult', json={'testResult':testResult ,'files':newFiles},timeout=10)
                 if response.status_code == 200:
                     print("Result has been sent successfly")
                     print("Response JSON:", response.json()) 
