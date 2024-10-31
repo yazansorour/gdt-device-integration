@@ -3,6 +3,7 @@ from classes.GDTMessage import GDTMessage
 
 import time
 import sys
+import requests
 
 localFolder = sys.argv[1] # ex : '/home/frappe/frappe-bench/sites/gdt/out'
 remoteFolder = sys.argv[2] # ex : '/home/frappe/share/TestMod/gdt/out' its bind it with remote folder
@@ -21,15 +22,15 @@ while True:
         if fileGDTPath:
             try:
                 testResult = ''
-
                 with open(fileGDTPath  , 'r') as file:
                     testResult = file.read()
 
-                gdtMessage = GDTMessage()
-                message = gdtMessage.parseMessage(testResult)
-                message = message.pop()
-                print(message)
-
+                response = requests.post('http://127.0.0.1:8000/api/method/endo.api.uploadTestResult', json={'testResult':testResult ,'files':newFiles},timeout=10)
+                if response.status_code == 200:
+                    print("Result has been sent successfly")
+                    print("Response JSON:", response.json()) 
+                else:
+                    print("Result sent error")
             except:
                 print("There is an issue on gdt file")
 
